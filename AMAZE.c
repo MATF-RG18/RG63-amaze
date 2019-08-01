@@ -3,6 +3,7 @@
 #include<GL/gl.h>
 #include<GL/glu.h>
 #include<GL/glut.h>
+#include<stdbool.h>
 
 //variables for width and depth
 static int window_width, window_height;
@@ -56,7 +57,7 @@ void on_display(void){
     //implementing the camera
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(4, 4, 4,
+    gluLookAt(10, 10, 10,
     	     0, 0, 0,
     	     0, 0, 1);
 
@@ -74,6 +75,71 @@ void on_display(void){
         glVertex3f(0,0,0);
         glVertex3f(0,0,10);
     glEnd();
+
+    //floor
+    glColor3f(0.5,0.5,0.5);
+    glPushMatrix();
+
+    glTranslatef(25, 25, 0);
+    glScalef(100, 100, 0.2);
+    glutSolidCube(1);
+
+    glPopMatrix();
+
+    //maze matrix
+    bool** M[101][101];
+    int i=0, j=0;
+
+    //false means there is no wall there
+    for(i=0; i<100; i++){
+        for(j=0; j<100; j++){
+            M[i][j]=false;
+        }
+    }
+
+    //true means there is a wall there
+    for(i=0; i<100; i++){
+        for(j=0; j<100; j++){
+            if(i==0){
+                M[i][j]=true;
+            }
+            if(j==0){
+                M[i][j]=true;
+            }
+            if(i==99){
+                M[i][j]=true;
+            }
+            if(j==99){
+                M[i][j]=true;
+            }
+
+        }
+    }
+    /*
+    for(i=0; i<100; i++){
+        for(j=0; j<100; j++){
+            printf("%d ", M[i][j]);
+        }
+    }
+    */
+
+    //the floor is now surrounded with walls
+    for(i=0; i<100; i++){
+        for(j=0; j<100; j++){
+            if(M[i][j] == true){
+                
+                glColor3f(0,0,0);
+                glPushMatrix();
+
+                glTranslatef(i-25, j-25, 0);
+                glScalef(1, 1, 10);
+                glutSolidCube(1);
+
+                glPopMatrix();
+            }
+        }
+    }
+    
 
     // the picture gets drawn
     glutSwapBuffers();

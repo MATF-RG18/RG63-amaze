@@ -57,8 +57,8 @@ void on_display(void){
     //implementing the camera
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(10, 10, 10,
-    	     0, 0, 0,
+    gluLookAt(12.5, 12.5, 50,
+    	     12, 12, 0,
     	     0, 0, 1);
 
     //the coordinate system
@@ -81,57 +81,42 @@ void on_display(void){
     glPushMatrix();
 
     glTranslatef(25, 25, 0);
-    glScalef(100, 100, 0.2);
+    glScalef(50, 50, 0.2);
     glutSolidCube(1);
 
     glPopMatrix();
 
     //maze matrix
-    bool** M[101][101];
+    int M[51][51];
     int i=0, j=0;
 
-    //false means there is no wall there
-    for(i=0; i<100; i++){
-        for(j=0; j<100; j++){
-            M[i][j]=false;
-        }
-    }
+    //file pointer
+    FILE *fp;
+    fp = fopen("MAZE.txt", "r");
 
-    //true means there is a wall there
-    for(i=0; i<100; i++){
-        for(j=0; j<100; j++){
-            if(i==0){
-                M[i][j]=true;
-            }
-            if(j==0){
-                M[i][j]=true;
-            }
-            if(i==99){
-                M[i][j]=true;
-            }
-            if(j==99){
-                M[i][j]=true;
-            }
-
-        }
+    //I wrote a matrix with ones and zeroes
+    //1 - there is a wall there 0 - there is no wall there
+    //here we scan that matrix from a file
+    for(i=0; i<50; i++){
+        for(j=0; j<50; j++){
+       if (!fscanf(fp, " %d", &M[i][j])) 
+           break;
+      }
+      printf("%d \n", M[i][j]);
     }
-    /*
-    for(i=0; i<100; i++){
-        for(j=0; j<100; j++){
-            printf("%d ", M[i][j]);
-        }
-    }
-    */
+    
+    fclose(fp);
+    
 
-    //the floor is now surrounded with walls
-    for(i=0; i<100; i++){
-        for(j=0; j<100; j++){
-            if(M[i][j] == true){
-                
+    //here we draw the maze
+    for(i=0; i<50; i++){
+        for(j=0; j<50; j++){
+            if(M[i][j] == 1){
+                printf("sam usao ovde?\n");
                 glColor3f(0,0,0);
                 glPushMatrix();
 
-                glTranslatef(i-25, j-25, 0);
+                glTranslatef(i, j, 0);
                 glScalef(1, 1, 10);
                 glutSolidCube(1);
 

@@ -21,7 +21,7 @@ int main(int argc, char** argv){
 
     //window initialization
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(600,600);
+    glutInitWindowSize(1200,1200);
     glutCreateWindow("AMAZE");
 
     //calling the callback functions
@@ -43,6 +43,23 @@ int main(int argc, char** argv){
 
 void on_display(void){
 
+    //this whole section brings light to our MAZE
+    GLfloat light_position[] = {1, 1, 1, 0};
+
+    GLfloat light_ambient[] = {0, 0, 0, 1};
+
+    GLfloat light_diffuse[] = {1, 1, 1, 1};
+
+    GLfloat light_specular[] = {0.9, 0.9, 0.9, 1};
+
+    
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+
 	//cleaning out the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -57,9 +74,13 @@ void on_display(void){
     //implementing the camera
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(12.5, 12.5, 50,
-    	     12, 12, 0,
+    gluLookAt(50, 50, 100,
+    	     49, 49, 0,
     	     0, 0, 1);
+
+    
+    glRotatef(-45, 0, 0, 1);
+    glTranslatef(-50, 20, 0);
 
     //the coordinate system
     glBegin(GL_LINES);
@@ -76,12 +97,22 @@ void on_display(void){
         glVertex3f(0,0,10);
     glEnd();
 
+    //material parameters
+    GLfloat ambient_coeffs[] = { 0.5, 0.5, 0.5, 1};
+    GLfloat diffuse_coeffs[] = { 0.5, 0.5, 0.5, 1};
+    GLfloat specular_coeffs[] = { 0.5, 0.5, 0.5, 1};
+    GLfloat shininess = 15;
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+
     //floor
     glColor3f(0.5,0.5,0.5);
     glPushMatrix();
 
-    glTranslatef(25, 25, 0);
-    glScalef(50, 50, 0.2);
+    glTranslatef(50, 50, 0);
+    glScalef(100, 100, 0.2);
     glutSolidCube(1);
 
     glPopMatrix();
@@ -102,7 +133,6 @@ void on_display(void){
        if (!fscanf(fp, " %d", &M[i][j])) 
            break;
       }
-      printf("%d \n", M[i][j]);
     }
     
     fclose(fp);
@@ -112,12 +142,35 @@ void on_display(void){
     for(i=0; i<50; i++){
         for(j=0; j<50; j++){
             if(M[i][j] == 1){
-                printf("sam usao ovde?\n");
-                glColor3f(0,0,0);
+                if(i <=25 && j <= 25)
+                {
+                glColor3f(0,0,1);
+                GLfloat diffuse_coeffs_B[] = { 0, 0, 0.7, 1};
+                glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs_B);
+                }
+                else if(i <=25 && j > 25)
+                {
+                glColor3f(0,1,0);
+                GLfloat diffuse_coeffs_G[] = { 0, 0.7, 0, 1};
+                glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs_G);
+                }
+                else if(i >25 && j <= 25)
+                {
+                glColor3f(1,0,0);
+                GLfloat diffuse_coeffs_R[] = { 0.7, 0, 0, 1};
+                glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs_R);
+                }
+                else if(i >25 && j > 25)
+                {
+                glColor3f(1,1,1);
+                GLfloat diffuse_coeffs_W[] = { 0.7, 0.7, 0.7, 1};
+                glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs_W);
+                }
+
                 glPushMatrix();
 
-                glTranslatef(i, j, 0);
-                glScalef(1, 1, 10);
+                glTranslatef(2*i, 2*j, 0);
+                glScalef(2, 2, 10);
                 glutSolidCube(1);
 
                 glPopMatrix();

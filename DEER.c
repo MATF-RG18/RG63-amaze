@@ -5,8 +5,28 @@
 #include<GL/glut.h>
 #include<stdbool.h>
 #include "DEER.h"
+#include "Sword_and_shield.h"
 
 void DEER(){
+
+
+    //sheild
+    glPushMatrix();
+
+    glTranslatef(0, -2, 3.1);
+    glRotatef(90, 1, 0, 0);
+    glRotatef(180, 1, 0, 0);
+    glScalef(0.6, 0.6, 0.5);
+    draw_shield();
+
+    glPopMatrix();
+
+
+    //White
+    float mat_ambient_White[]={ 0.05f,0.05f,0.05f,1.0f };
+    float mat_diffuse_White[]={ 0.9f,0.9f,0.9f,1.0f};
+    float mat_specular_White[] ={ 0.7f,0.7f,0.7f,1.0f};
+    float shine_White = 10.0f;
 
     GLfloat ambient_coeffs[] = { 0.25f, 0.148f, 0.06475f, 1.0f};
     GLfloat diffuse_coeffs_Light_Brown[] = { 0.4f, 0.2368f, 0.1036f, 1.0f};
@@ -24,7 +44,9 @@ void DEER(){
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
+
     //body
+
     glPushMatrix();
 
     glTranslatef(0, 0, 2);
@@ -42,7 +64,7 @@ void DEER(){
 
     glPopMatrix();
 
-    //legs
+    //legs and movement animation
     glPushMatrix();
 
     glTranslatef(0, 0, 1.7);
@@ -87,6 +109,10 @@ void DEER(){
 
     glPopMatrix();
 
+    //attack animation
+    glPushMatrix();
+    glRotatef(attack_rotation, 0, 0, 1);
+
     //neck
     glPushMatrix();
 
@@ -103,6 +129,34 @@ void DEER(){
     glTranslatef(0, 3, 3.7);
     glScalef(0.7, 0.7, 0.7);
     glRotatef(-22.5, 1, 0, 0);
+
+    //sword
+    glPushMatrix();
+
+    glTranslatef(-1.2, 1.5, -0.6);
+    glRotatef(-90, 0, 1, 0);
+    glRotatef(-90, 0, 0, 1);
+    glRotatef(24, 0, 0, 1);
+    //glScalef(0.3, 0.3, 0.3);
+    draw_sword();
+
+    glPopMatrix();
+
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs_Light_Brown);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, shine);
+
+    //mouth
+    glPushMatrix();
+
+    glTranslatef(0, 0, -0.5);
+    glRotatef(-25, 1, 0, 0);
+    glScalef(2, 3, 0.4);
+    
+    glutSolidCube(1);
+
+    glPopMatrix();
 
 
     //base
@@ -140,9 +194,10 @@ void DEER(){
     glutSolidCube(1);
     glPopMatrix();
 
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs_Light_Brown);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, shine);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient_White);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse_White);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular_White);
+    glMaterialf(GL_FRONT, GL_SHININESS, shine_White);
 
     //antler number 1
 
@@ -247,6 +302,8 @@ void DEER(){
     glTranslatef(0.9, 0, 1);
     glScalef(0.3, 0.3, 0.9);   
     glutSolidCube(1);
+
+    glPopMatrix();
 
     glPopMatrix();
 

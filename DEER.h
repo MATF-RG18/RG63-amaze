@@ -3,5 +3,6 @@
 
 void DEER(void);
 extern int move;
+extern int attack_rotation;
 
 #endif

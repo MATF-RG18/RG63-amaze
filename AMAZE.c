@@ -56,8 +56,7 @@ int Abraxos_ind = 0;
 //This really gets the deer going
 int force_push = 0, side_force_push = 0;
 //position of the deer in the MAZE matrix
-//extern int deer_i = -1, deer_j = 1;
-extern int deer_i = 32, deer_j = 41;
+extern int deer_i = -1, deer_j = 1;
 
 //this tells us if the deer is in motion
 extern int deer_motion = 0;
